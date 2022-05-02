@@ -12,6 +12,8 @@ import { userSlice } from '../redux/slice/userSlice';
 import { db, firebaseConfig } from '../../firebase-config';
 import { getDatabase, ref, set } from "firebase/database";
 
+import { setUser, getUser } from '../utils/services';
+
 const SettingsScreen = () => {
   const [isLogin, setIsLogin] = useState(false);
 
@@ -28,17 +30,25 @@ const SettingsScreen = () => {
     alert(userInfo.userName);
   }
 
-  const handleClick = () => {
-    const db2 = getDatabase();
-    set(ref(db, 'users/' + '001'), {
-      userId: userInfo.userId,
-      userName: userInfo.userName
-    })
-    .then(() => {
-      alert('Data saved successfully!');
-    })
-    .catch((error) => {
-      alert('The write failed...');
+  const handlePostClick = () => {
+    setUser(userInfo, (data) => {
+      if (data.success) {
+        alert('post successful!');
+      }
+      else {
+        alert('error');
+      }
+    });
+  }
+
+  const handleGetClick = () => {
+    getUser(userInfo.userId, (data) => {
+      if(data.success){
+        alert('username is ' + data.userName);
+      }
+      else{
+        alert('error');
+      }
     });
   }
 
@@ -48,7 +58,8 @@ const SettingsScreen = () => {
           <Text>user id: {userInfo.userId}</Text>
           <Text>user name: {userInfo.userName}</Text>
           <Text>login status: {userInfo.isLogin === true ? 'true' : 'false'}</Text>
-          <Button style={styles.button} title="Write Data" onPress={handleClick} />
+          <Button style={styles.button} title="Post Data" onPress={handlePostClick} />
+          <Button style={styles.button} title="Get Data" onPress={handleGetClick} />
       </View>
   );
 };

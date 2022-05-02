@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TextInput, Button, Alert } from 'react-n
 import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
 import { userSlice } from '../redux/slice/userSlice';
+import { windowWidth, windowHeight } from '../redux/store';
 
 export default function SignInScreen() {
   const [username, onChangeUsername] = React.useState('');
@@ -20,8 +21,8 @@ export default function SignInScreen() {
 
   const handleTestClick = () => {
     Alert.alert(
-      "Alert Title",
-      "My Alert Msg",
+      "Title",
+      "Message",
       [
         {
           text: "Cancel",
@@ -35,10 +36,14 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, styles.logoContainer]}>
+        <Image
+          style={styles.tinyLogo}
+          source={require('../assets/bill-icon.png')}
+        />
         <HeaderText titleName="Quản lý thu chi"/>
       </View>
-      <View style={styles.leftContainer}>
+      <View style={[styles.leftContainer, styles.inputContainer]}>
         <Text style={styles.textButton}>Số điện thoại</Text>
         <TextInput
           style={styles.input}
@@ -47,6 +52,7 @@ export default function SignInScreen() {
           placeholder="Nhập số điện thoại"
           keyboardType="numeric"
         />
+        <Text style={styles.textButton}>Mật khẩu</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
@@ -54,14 +60,14 @@ export default function SignInScreen() {
           placeholder="Nhập mật khẩu"
           secureTextEntry={true}
         />
+        <View style={styles.rightContainer}>
+          <Text style={styles.textButton}>Quên mật khẩu</Text>
+        </View>
+        <View style={styles.leftContainer}>
+          <Button style={styles.button} title="Đăng nhập" onPress={handleSignInClick} />
+        </View>
       </View>
-      <View style={styles.rightContainer}>
-        <Text style={styles.textButton}>Quên mật khẩu</Text>
-      </View>
-      <View style={styles.leftContainer}>
-        <Button style={styles.button} title="Đăng nhập" onPress={handleSignInClick} />
-      </View>
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, styles.infoContainer]}>
         <Text style={styles.textButton}>Chưa có tài khoản ?</Text>
         <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
       </View>
@@ -75,26 +81,31 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#6BA9E2',
   },
+  logoContainer: {
+    height: windowHeight*0.3,
+  },
+  inputContainer: {
+    height: windowHeight*0.3,
+  },
+  infoContainer: {
+    height: windowHeight*0.2,
+  },  
   leftContainer: {
-    borderWidth: 2,
-    borderColor: 'green',
     marginBottom: 10,
   },
   rightContainer: {
     alignItems: 'flex-end',
-    borderWidth: 2,
-    borderColor: 'green',
     marginBottom: 10,
   },
   centerContainer: {
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'green',
     marginBottom: 10,
   },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10
   },
   input: {
     height: 40,
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0,
   },
   textButton: {
-    color: 'blue',
+    color: '#000080',
   },
   button: {
     textAlign: 'center',
