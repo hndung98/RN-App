@@ -4,39 +4,15 @@ import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-
-export default function SignInScreen() {
+export default function SignUpScreen() {
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
-  const navigation = useNavigation();
+  const [passwordAgain, onChangePasswordAgain] = React.useState('');
 
   const dispatch = useDispatch();
 
-  const handleSignInClick = () => {
-    navigation.navigate('HomeScreen');
-    // dispatch(userSlice.actions.login({
-    //   userId: 99,
-    //   userName: username,
-    //   isLogin: true
-    // }));
-  }
-
   const handleSignUpClick = () => {
-    Alert.alert(
-      "Title",
-      "Message",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("Pressed SignUp") }
-      ]
-    );
   }
 
   const handleTestClick = () => {
@@ -62,6 +38,7 @@ export default function SignInScreen() {
           source={require('../assets/bill-icon.png')}
         />
         <HeaderText titleName="Quản lý thu chi"/>
+        <Text style={styles.textButton}>Đăng ký tài khoản</Text>
       </View>
       <View style={[styles.leftContainer, styles.inputContainer]}>
         <Text style={styles.textButton}>Số điện thoại</Text>
@@ -80,15 +57,22 @@ export default function SignInScreen() {
           placeholder="Nhập mật khẩu"
           secureTextEntry={true}
         />
+        <Text style={styles.textButton}>Nhập lại mật khẩu</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePasswordAgain}
+          value={passwordAgain}
+          placeholder="Nhập mật khẩu"
+          secureTextEntry={true}
+        />
         <View style={styles.rightContainer}>
           <Text style={styles.textButton}>Quên mật khẩu</Text>
         </View>
         <View style={styles.leftContainer}>
-          <Button style={styles.button} title="Đăng nhập" onPress={handleSignInClick} />
+          <Button style={styles.button} title="Đăng nhập" onPress={handleSignUpClick} />
         </View>
       </View>
       <View style={[styles.centerContainer, styles.infoContainer]}>
-        <Text style={styles.textButton}>Chưa có tài khoản ?</Text>
         <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
       </View>
     </View>

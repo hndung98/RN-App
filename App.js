@@ -2,11 +2,15 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme, View, } fro
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 
 import HomeScreen from './src/screens/HomeScreen';
+import SignInScreen from './src/screens/SignInScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -14,8 +18,11 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeProvider>
           <NavigationContainer>
-            <HomeScreen />
-            <StatusBar />
+            <Stack.Navigator>
+              <Stack.Screen name="SignInScreen" component={SignInScreen} />
+              <Stack.Screen name="HomeScreen" component={HomeScreen} />
+              {/* <StatusBar /> */}
+            </Stack.Navigator>
           </NavigationContainer>
         </ThemeProvider>
       </SafeAreaProvider>
