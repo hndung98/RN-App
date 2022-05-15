@@ -1,16 +1,30 @@
-import React from 'react';
-import { Text, View, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, SafeAreaView, ScrollView, View, StatusBar, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
 import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
 
 export default function SignUpScreen() {
-  const [username, onChangeUsername] = React.useState('');
+  const [phoneNumber, onChangePhoneNumber] = React.useState('');
+  const [fullname, onChangeFullname] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const [passwordAgain, onChangePasswordAgain] = React.useState('');
 
+  const [openGender, setOpenGender] = useState(false);
+  const [gender, setGender] = useState(null);
+  const [genderList, setGenderList] = useState([
+    {label: 'Male', value: 'male'},
+    {label: 'Female', value: 'female'}
+  ]);
+
   const dispatch = useDispatch();
+  DropDownPicker.setListMode("SCROLLVIEW");
+  useEffect(() => {
+    //alert("SignUpScreen");
+  });
 
   const handleSignUpClick = () => {
   }
@@ -31,6 +45,10 @@ export default function SignUpScreen() {
   }
 
   return (
+    <SafeAreaView style={{flex: 1}}>
+    <StatusBar/>
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic">
     <View style={styles.container}>
       <View style={[styles.centerContainer, styles.logoContainer]}>
         <Image
@@ -44,10 +62,27 @@ export default function SignUpScreen() {
         <Text style={styles.textButton}>Số điện thoại</Text>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeUsername}
-          value={username}
+          onChangeText={onChangePhoneNumber}
+          value={phoneNumber}
           placeholder="Nhập số điện thoại"
           keyboardType="numeric"
+        />
+        <Text style={styles.textButton}>Họ tên</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeFullname}
+          value={fullname}
+          placeholder="Nhập họ tên"
+        />
+        <Text style={styles.textButton}>Giới tính</Text>
+        <DropDownPicker
+          style={styles.dropdown}
+          open={openGender}
+          value={gender}
+          items={genderList}
+          setOpen={setOpenGender}
+          setValue={setGender}
+          setItems={setGenderList}
         />
         <Text style={styles.textButton}>Mật khẩu</Text>
         <TextInput
@@ -69,13 +104,15 @@ export default function SignUpScreen() {
           <Text style={styles.textButton}>Quên mật khẩu</Text>
         </View>
         <View style={styles.leftContainer}>
-          <Button style={styles.button} title="Đăng nhập" onPress={handleSignUpClick} />
+          <Button style={styles.button} title="Đăng ký" onPress={handleSignUpClick} />
         </View>
       </View>
       <View style={[styles.centerContainer, styles.infoContainer]}>
         <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
       </View>
     </View>
+    </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -89,10 +126,10 @@ const styles = StyleSheet.create({
     height: windowHeight*0.3,
   },
   inputContainer: {
-    height: windowHeight*0.3,
+    //height: windowHeight*0.3,
   },
   infoContainer: {
-    height: windowHeight*0.2,
+    //height: windowHeight*0.2,
   },  
   leftContainer: {
     marginBottom: 10,
@@ -127,4 +164,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 8,
   },
+  dropdown: {
+    backgroundColor: '#6BA9E2',
+  }
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
 import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
@@ -15,28 +15,32 @@ export default function SignInScreen() {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+  });
+
   const handleSignInClick = () => {
     navigation.navigate('HomeScreen');
-    // dispatch(userSlice.actions.login({
-    //   userId: 99,
-    //   userName: username,
-    //   isLogin: true
-    // }));
+    dispatch(userSlice.actions.login({
+      userId: username,
+      userName: username,
+      isLogin: true
+    }));
   }
 
   const handleSignUpClick = () => {
-    Alert.alert(
-      "Title",
-      "Message",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("Pressed SignUp") }
-      ]
-    );
+    navigation.navigate('SignUpScreen');
+    // Alert.alert(
+    //   "Title",
+    //   "Message",
+    //   [
+    //     {
+    //       text: "Cancel",
+    //       onPress: () => console.log("Cancel Pressed"),
+    //       style: "cancel"
+    //     },
+    //     { text: "OK", onPress: () => console.log("Pressed SignUp") }
+    //   ]
+    // );
   }
 
   const handleTestClick = () => {
@@ -88,7 +92,9 @@ export default function SignInScreen() {
         </View>
       </View>
       <View style={[styles.centerContainer, styles.infoContainer]}>
-        <Text style={styles.textButton}>Chưa có tài khoản ?</Text>
+        <Text style={styles.textButton} onPress={handleSignUpClick}>Chưa có tài khoản ?</Text>
+      </View>
+      <View style={[styles.centerContainer, styles.infoContainer]}>
         <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
       </View>
     </View>

@@ -1,14 +1,16 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme, View, } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme, View, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from 'react-native-elements';
 import { Provider } from 'react-redux';
+
 import store from './src/redux/store';
 
 import HomeScreen from './src/screens/HomeScreen';
 import SignInScreen from './src/screens/SignInScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +21,24 @@ export default function App() {
         <ThemeProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen name="SignInScreen" component={SignInScreen} />
-              <Stack.Screen name="HomeScreen" component={HomeScreen} />
+              <Stack.Screen 
+                name="SignInScreen" 
+                component={SignInScreen} />
+              <Stack.Screen 
+                name="SignUpScreen" 
+                component={SignUpScreen} />
+              <Stack.Screen 
+                name="HomeScreen" 
+                component={HomeScreen} 
+                options={{
+                  headerRight: () => (
+                    <Button
+                      onPress={() => alert('This is a button!')}
+                      title="Info"
+                      color="#fff"
+                    />
+                  ),
+                }}/>
               {/* <StatusBar /> */}
             </Stack.Navigator>
           </NavigationContainer>

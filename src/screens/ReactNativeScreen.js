@@ -12,13 +12,6 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 const Section = ({children, title}): Node => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -28,7 +21,7 @@ const Section = ({children, title}): Node => {
           style={[
             styles.sectionTitle,
             {
-              color: isDarkMode ? Colors.white : Colors.black,
+              color: '#6495ed',
             },
           ]}>
           {title}
@@ -37,7 +30,7 @@ const Section = ({children, title}): Node => {
           style={[
             styles.sectionDescription,
             {
-              color: isDarkMode ? Colors.light : Colors.dark,
+              color: '#6495ed',
             },
           ]}>
           {children}
@@ -50,7 +43,7 @@ const Section = ({children, title}): Node => {
     const isDarkMode = useColorScheme() === 'dark';
   
     const backgroundStyle = {
-      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      backgroundColor: '#ff69b4',//hot pink
     };
   
     return (
@@ -59,25 +52,37 @@ const Section = ({children, title}): Node => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={backgroundStyle}>
-          <Header />
           <View
             style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
+              backgroundColor: '#ff69b4',
             }}>
             <Section title="Step One">
               Edit <Text style={styles.highlight}>ReactNativeScreen</Text> to change this
               screen and then come back to see your edits.
             </Section>
+            <Section title="Step Two">
+              Edit <Text style={styles.highlight}>ReactNativeScreen</Text> to change this
+              screen and then come back to see your edits.
+            </Section>
+            <Section title="Step Three">
+              Edit <Text style={styles.highlight}>ReactNativeScreen</Text> to change this
+              screen and then come back to see your edits.
+            </Section>
+            <Section title="Step Four">
+              Edit <Text style={styles.highlight}>ReactNativeScreen</Text> to change this
+              screen and then come back to see your edits.
+            </Section>
+            <Section title="Step Five">
+              Edit <Text style={styles.highlight}>ReactNativeScreen</Text> to change this
+              screen and then come back to see your edits.
+            </Section>
             <Section title="See Your Changes">
-              <ReloadInstructions />
             </Section>
             <Section title="Debug">
-              <DebugInstructions />
             </Section>
             <Section title="Learn More">
               Read the docs to discover what to do next:
             </Section>
-            <LearnMoreLinks />
           </View>
         </ScrollView>
       </SafeAreaView>

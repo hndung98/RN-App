@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,10 @@ const SettingsScreen = () => {
   const userInfo = useSelector(userInfoSelector);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    alert("SettingsScreen");
+  });
 
   const handleTextClick = () => {
     dispatch(userSlice.actions.login({
@@ -52,20 +56,40 @@ const SettingsScreen = () => {
     });
   }
 
+  const handleSignOutClick = () => {
+    dispatch(userSlice.actions.login({
+      userId: -1,
+      userName: '',
+      isLogin: false
+    }));
+    alert('Signed out');
+  }
+
   return (
       <View>
           <Text onPress={handleTextClick}>Settings Page</Text>
           <Text>user id: {userInfo.userId}</Text>
           <Text>user name: {userInfo.userName}</Text>
           <Text>login status: {userInfo.isLogin === true ? 'true' : 'false'}</Text>
-          <Button style={styles.button} title="Post Data" onPress={handlePostClick} />
-          <Button style={styles.button} title="Get Data" onPress={handleGetClick} />
+          <View style={styles.centerContainer}>
+            <Button style={styles.button} title="Post Data" onPress={handlePostClick} />
+          </View>
+          <View style={styles.centerContainer}>
+            <Button style={styles.button} title="Get Data" onPress={handleGetClick} />
+          </View>
+          <View style={styles.centerContainer}>
+            <Button style={styles.button} title="Sign out" onPress={handleSignOutClick} />
+          </View>
       </View>
   );
 };
 
 
 const styles = StyleSheet.create({
+    centerContainer: {
+      alignItems: 'center',
+      marginBottom: 10,
+    },
     highlight: {
       fontWeight: '700',
     },
