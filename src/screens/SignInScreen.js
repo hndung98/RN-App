@@ -19,7 +19,7 @@ export default function SignInScreen() {
   });
 
   const handleSignInClick = () => {
-    //navigation.navigate('HomeScreen');
+    //navigation.navigate('MainScreen');
     dispatch(userSlice.actions.login({
       userId: username,
       userName: username,
@@ -27,7 +27,7 @@ export default function SignInScreen() {
     }));
     navigation.reset({
       index: 0,
-      routes: [{name: 'HomeScreen'}],
+      routes: [{name: 'MainScreen'}],
     });
   }
 

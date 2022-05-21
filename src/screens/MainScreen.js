@@ -20,7 +20,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({navigation}) => {
+const MainScreen = ({navigation}) => {
   useEffect(() => {
   });
   return (
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
     },
   });
 
-  export default HomeScreen
+  export default MainScreen

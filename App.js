@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 
 import store from './src/redux/store';
 
-import HomeScreen from './src/screens/HomeScreen';
+import MainScreen from './src/screens/MainScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 
@@ -30,8 +30,8 @@ export default function App() {
                 component={SignUpScreen} 
                 options={{headerShown:false}}/>
               <Stack.Screen 
-                name="HomeScreen" 
-                component={HomeScreen} 
+                name="MainScreen" 
+                component={MainScreen} 
                 options={{
                   headerShown:false,
                   headerRight: () => (
