@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Text, SafeAreaView, ScrollView, View, StatusBar, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
+import { Text, SafeAreaView, ScrollView, View, StatusBar, StyleSheet, Image, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Icon from 'react-native-vector-icons/Ionicons';
+//import DatePicker from 'react-native-datepicker';
+//import DatePicker from 'react-native-date-picker';
 
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
+import { formatDateToYMDString } from '../utils/common';
 
 export default function SignUpScreen() {
   const [phoneNumber, onChangePhoneNumber] = React.useState('');
@@ -13,12 +18,38 @@ export default function SignUpScreen() {
   const [password, onChangePassword] = React.useState('');
   const [passwordAgain, onChangePasswordAgain] = React.useState('');
 
+  // gender input
   const [openGender, setOpenGender] = useState(false);
   const [gender, setGender] = useState(null);
   const [genderList, setGenderList] = useState([
     {label: 'Male', value: 'male'},
     {label: 'Female', value: 'female'}
   ]);
+  
+  // birthday input 
+  // const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  // const [openDateOfBirth, setOpenDateOfBirth] = useState(false);
+  const [exampleDate, setExampleDate] = useState(new Date(1598051730000));
+  const [birthday, setBirthday] = useState(new Date(1598051730000));
+  const [birthdayMode, setBirthdayMode] = useState('date');
+  const [isShowBirthday, setIsShowBirthday] = useState(false);
+  
+  const onChangeBirthday = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setIsShowBirthday(false);
+    if (selectedDate) {
+      setBirthday(currentDate);
+      setExampleDate(currentDate);
+    }
+    else {
+      setBirthday(exampleDate);
+    }
+  };
+
+  const showBirthdatPicker = (currentMode) => {
+    setIsShowBirthday(true);
+    setBirthdayMode(currentMode);
+  }
 
   const dispatch = useDispatch();
   DropDownPicker.setListMode("SCROLLVIEW");
@@ -100,9 +131,44 @@ export default function SignUpScreen() {
           placeholder="Nhập mật khẩu"
           secureTextEntry={true}
         />
-        <View style={styles.rightContainer}>
-          <Text style={styles.textButton}>Quên mật khẩu</Text>
-        </View>
+        <Text style={styles.textButton}>Ngày sinh 
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {showBirthdatPicker('date');}} >
+            <Icon name="pencil" color="#fff" size={25} />
+          </TouchableOpacity>
+        </Text>
+        
+        {isShowBirthday && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={birthday}
+            mode={birthdayMode}
+            is24Hour={true}
+            onChange={onChangeBirthday}
+          />
+        )}
+        <TextInput
+          style={styles.input}
+          editable={false}
+          value={formatDateToYMDString(birthday)}
+          placeholder="Chọn ngày"
+        />
+
+        {/* <View style={styles.dateInput}>
+          <View style={{flex: 6}}>
+            <TextInput
+              style={styles.input}
+              onChangeText={() => {}}
+              value={formatDateToYMDString(birthday)}
+              placeholder="Chọn ngày"
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <Button onPress={() => {showBirthdatPicker('date');}} title="" />
+          </View>
+        </View> */}
+        
         <View style={styles.leftContainer}>
           <Button style={styles.button} title="Đăng ký" onPress={handleSignUpClick} />
         </View>
@@ -156,6 +222,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderRightWidth: 0,
     borderLeftWidth: 0,
+  },
+  dateInput: {
+    height: 40,
+    marginBottom: 12,
+    flexDirection: "row"
   },
   textButton: {
     color: '#000080',

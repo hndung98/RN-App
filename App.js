@@ -23,14 +23,17 @@ export default function App() {
             <Stack.Navigator>
               <Stack.Screen 
                 name="SignInScreen" 
-                component={SignInScreen} />
+                component={SignInScreen} 
+                options={{headerShown:false}}/>
               <Stack.Screen 
                 name="SignUpScreen" 
-                component={SignUpScreen} />
+                component={SignUpScreen} 
+                options={{headerShown:false}}/>
               <Stack.Screen 
                 name="HomeScreen" 
                 component={HomeScreen} 
                 options={{
+                  headerShown:false,
                   headerRight: () => (
                     <Button
                       onPress={() => alert('This is a button!')}

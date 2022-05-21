@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button
-} from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+
 import { userInfoSelector } from '../redux/selectors';
 import { userSlice } from '../redux/slice/userSlice';
 
@@ -17,12 +14,13 @@ import { setUser, getUser } from '../utils/services';
 const SettingsScreen = () => {
   const [isLogin, setIsLogin] = useState(false);
 
+  const navigation = useNavigation();
+
   const userInfo = useSelector(userInfoSelector);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    alert("SettingsScreen");
   });
 
   const handleTextClick = () => {
@@ -62,6 +60,10 @@ const SettingsScreen = () => {
       userName: '',
       isLogin: false
     }));
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'SignInScreen'}],
+    });
     alert('Signed out');
   }
 

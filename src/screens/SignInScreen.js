@@ -19,12 +19,16 @@ export default function SignInScreen() {
   });
 
   const handleSignInClick = () => {
-    navigation.navigate('HomeScreen');
+    //navigation.navigate('HomeScreen');
     dispatch(userSlice.actions.login({
       userId: username,
       userName: username,
       isLogin: true
     }));
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'HomeScreen'}],
+    });
   }
 
   const handleSignUpClick = () => {
