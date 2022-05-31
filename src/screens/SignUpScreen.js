@@ -5,25 +5,41 @@ import { useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import DatePicker from 'react-native-datepicker';
-//import DatePicker from 'react-native-date-picker';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
 import { formatDateToYMDString } from '../utils/common';
+import { signUpNewUser } from '../utils/services';
+
+const getYMD = (dateObj) => {
+  var month = dateObj.getUTCMonth() + 1; //months from 1-12
+  var day = dateObj.getUTCDate();
+  var year = dateObj.getUTCFullYear();
+
+  return newdate = year + "/" + month + "/" + day;
+}
+const isNumeric = (str) => {
+  if (typeof str != "string") return false // we only process strings!  
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
 
 export default function SignUpScreen() {
   const [phoneNumber, onChangePhoneNumber] = React.useState('');
   const [fullname, onChangeFullname] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const [passwordAgain, onChangePasswordAgain] = React.useState('');
+  
+  const navigation = useNavigation();
 
   // gender input
   const [openGender, setOpenGender] = useState(false);
   const [gender, setGender] = useState(null);
   const [genderList, setGenderList] = useState([
-    {label: 'Male', value: 'male'},
-    {label: 'Female', value: 'female'}
+    {label: 'Nam', value: 'Nam'},
+    {label: 'Nữ', value: 'Nữ'},
+    {label: 'Khác', value: 'Khác'},
   ]);
   
   // birthday input 
@@ -58,19 +74,84 @@ export default function SignUpScreen() {
   });
 
   const handleSignUpClick = () => {
+    if (!validateForm().success){
+      showAlert(validateForm().msg);
+    }
+    else if (!validatePassword().success){
+      showAlert(validatePassword().msg);
+    }
+    else if (!validatePhone().success){
+      showAlert(validatePhone().msg)
+    }
+    else {
+      data = {
+        userName: phoneNumber,
+        phoneNumber: phoneNumber,
+        fullname: fullname,
+        gender: gender,
+        password: password,
+        birthday: getYMD(birthday),
+        position: 'TP Hồ Chí Minh'
+      }
+      console.log(data);
+      signUpNewUser(data, (res) => {
+        if (res.success){
+          showAlert(res.msg);
+          navigation.navigate('SignInScreen');
+        }
+        else {
+          showAlert(res.msg);
+        }
+      });
+    }
   }
 
-  const handleTestClick = () => {
+  const validateForm = () => {
+    if (phoneNumber.length === 0){
+      return {success: false, msg: 'Vui lòng nhập số điện thoại'};
+    }
+    else if (fullname.length === 0){
+      return {success: false, msg: 'Vui lòng nhập họ tên'};
+    }
+    else if (password.length === 0){
+      return {success: false, msg: 'Vui lòng nhập mật khẩu'};
+    }
+    else if (passwordAgain.length === 0){
+      return {success: false, msg: 'Vui lòng nhập mật khậu xác nhận'};
+    }
+    return {success: true, msg: ''};
+  }
+  const validatePassword = () => {
+    if (password.length < 6){
+      return {success: false, msg: 'Độ dài mật khẩu phải lớn hơn 5'};
+    }
+    if (password !== passwordAgain) {
+      return {success: false, msg: 'Mật khẩu không khớp'};
+    }
+    return {success: true, msg: ''};
+  }
+  const validatePhone = () => {
+    if (isNumeric(phoneNumber)) {
+      if(phoneNumber.length !== 10){
+        return {success: false, msg: 'Số điện thoại không hợp lệ'};
+      }
+    }
+    else {
+      return {success: false, msg: 'Số điện thoại không hợp lệ'};
+    }
+    return {success: true, msg: ''};
+  }
+
+  const showAlert = (msg) => {
     Alert.alert(
-      "Title",
-      "Message",
+      "Thông báo",
+      msg,
       [
         {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          text: "OK",
+          onPress: () => {},
           style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
+        }
       ]
     );
   }
@@ -174,7 +255,7 @@ export default function SignUpScreen() {
         </View>
       </View>
       <View style={[styles.centerContainer, styles.infoContainer]}>
-        <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
+        <Text style={styles.textButton}>Phiên bản 1.01</Text>
       </View>
     </View>
     </ScrollView>

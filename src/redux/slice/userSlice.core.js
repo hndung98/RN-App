@@ -1,5 +1,5 @@
 const initState = {
-    userId: 0,
+    phoneNumber: 0,
     userName: '',
     isLogin: false,
 }
@@ -9,7 +9,7 @@ const userReducer = (state = initState, action) => {
         case 'user/login':
             return {
                 ...state,
-                userId: action.payload.userId,
+                phoneNumber: action.payload.phoneNumber,
                 userName: action.payload.userName,
                 isLogin: true,
             }

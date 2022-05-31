@@ -7,9 +7,16 @@ import { windowWidth, windowHeight } from '../redux/store';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { signInUser } from '../utils/services';
+
+const isNumeric = (str) => {
+  if (typeof str != "string") return false // we only process strings!  
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
 
 export default function SignInScreen() {
-  const [username, onChangeUsername] = React.useState('');
+  const [phoneNumber, onChangePhoneNumber] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const navigation = useNavigation();
 
@@ -19,45 +26,84 @@ export default function SignInScreen() {
   });
 
   const handleSignInClick = () => {
-    //navigation.navigate('MainScreen');
-    dispatch(userSlice.actions.login({
-      userId: username,
-      userName: username,
-      isLogin: true
-    }));
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'MainScreen'}],
-    });
+    if (!validateForm().success){
+      showAlert(validateForm().msg);
+    }
+    else if (!validatePassword().success){
+      showAlert(validatePassword().msg);
+    }
+    else if (!validatePhone().success){
+      showAlert(validatePhone().msg)
+    }
+    else{
+      signInUser({
+        phoneNumber: phoneNumber,
+        password: password
+      }, 
+      (res) => {
+        if(res.success){
+          console.log(res.data.user);
+          dispatch(userSlice.actions.login({
+            phoneNumber: phoneNumber,
+            fullname: res.data.user.fullname,
+            isLogin: true
+          }));
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'MainScreen'}],
+          });
+        }
+        else{
+          showAlert(res.data.msg)
+        }
+      });
+    }
+    return;
   }
 
   const handleSignUpClick = () => {
     navigation.navigate('SignUpScreen');
-    // Alert.alert(
-    //   "Title",
-    //   "Message",
-    //   [
-    //     {
-    //       text: "Cancel",
-    //       onPress: () => console.log("Cancel Pressed"),
-    //       style: "cancel"
-    //     },
-    //     { text: "OK", onPress: () => console.log("Pressed SignUp") }
-    //   ]
-    // );
   }
 
-  const handleTestClick = () => {
+  const validateForm = () => {
+    if (phoneNumber.length === 0){
+      return {success: false, msg: 'Vui lòng nhập số điện thoại'};
+    }
+    else if (password.length === 0){
+      return {success: false, msg: 'Vui lòng nhập mật khẩu'};
+    }
+    return {success: true, msg: ''};
+  }
+
+  const validatePhone = () => {
+    if (isNumeric(phoneNumber)) {
+      if(phoneNumber.length !== 10){
+        return {success: false, msg: 'Số điện thoại không hợp lệ'};
+      }
+    }
+    else {
+      return {success: false, msg: 'Số điện thoại không hợp lệ'};
+    }
+    return {success: true, msg: ''};
+  }
+
+  const validatePassword = () => {
+    if (password.length < 6){
+      return {success: false, msg: 'Độ dài mật khẩu phải lớn hơn 5'};
+    }
+    return {success: true, msg: ''};
+  }
+
+  const showAlert = (msg) => {
     Alert.alert(
-      "Title",
-      "Message",
+      "Thông báo",
+      msg,
       [
         {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          text: "OK",
+          onPress: () => {},
           style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
+        }
       ]
     );
   }
@@ -75,8 +121,8 @@ export default function SignInScreen() {
         <Text style={styles.textButton}>Số điện thoại</Text>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeUsername}
-          value={username}
+          onChangeText={onChangePhoneNumber}
+          value={phoneNumber}
           placeholder="Nhập số điện thoại"
           keyboardType="numeric"
         />
@@ -99,7 +145,7 @@ export default function SignInScreen() {
         <Text style={styles.textButton} onPress={handleSignUpClick}>Chưa có tài khoản ?</Text>
       </View>
       <View style={[styles.centerContainer, styles.infoContainer]}>
-        <Text style={styles.textButton} onPress={handleTestClick}>Phiên bản 1.01</Text>
+        <Text style={styles.textButton} >Phiên bản 1.01</Text>
       </View>
     </View>
   );
@@ -110,9 +156,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 12,
     backgroundColor: '#6BA9E2',
+    position: 'absolute',
+    width: '100%'
   },
   logoContainer: {
     height: windowHeight*0.3,
+    marginTop: 20,
   },
   inputContainer: {
     height: windowHeight*0.3,
