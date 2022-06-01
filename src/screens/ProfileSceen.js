@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfoSelector } from '../redux/selectors';
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
 
-import { db, firebaseConfig } from '../../firebase-config';
-import { getDatabase, ref, set } from "firebase/database";
+//import { db, firebaseConfig } from '../../firebase-config';
+//import { getDatabase, ref, set } from "firebase/database";
 
-import { setUser, getUser } from '../utils/services';
+//import { setUser, getUser } from '../utils/services';
 
 const AVATAR_PANEL_HEIGHT = windowHeight * 0.1;
 const CONTENT_PANEL_WIDTH = windowWidth * 0.92;
@@ -61,7 +61,7 @@ const ProfileScreen = () => {
     useEffect(() => {
         setFullname(userInfo.fullname);
         setPhone(userInfo.phoneNumber);
-        setPosition('TP Hồ Chí Minh');
+        setPosition(userInfo.position);
     });
 
     const backgroundStyle = {
@@ -71,7 +71,7 @@ const ProfileScreen = () => {
     const handleSignOutClick = () => {
         Alert.alert(
             "Thông báo",
-            "Bạn có chắc chắn muốn đăng xuất",
+            "Bạn có chắc chắn muốn đăng xuất ?",
             [
                 {
                     text: "Huỷ",

@@ -5,25 +5,13 @@ import { useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
-import { formatDateToYMDString } from '../utils/common';
+import { formatDateToYMDString, getYMD, isNumeric } from '../utils/common';
 import { signUpNewUser } from '../utils/services';
 
-const getYMD = (dateObj) => {
-  var month = dateObj.getUTCMonth() + 1; //months from 1-12
-  var day = dateObj.getUTCDate();
-  var year = dateObj.getUTCFullYear();
-
-  return newdate = year + "/" + month + "/" + day;
-}
-const isNumeric = (str) => {
-  if (typeof str != "string") return false // we only process strings!  
-  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-}
 
 export default function SignUpScreen() {
   const [phoneNumber, onChangePhoneNumber] = React.useState('');

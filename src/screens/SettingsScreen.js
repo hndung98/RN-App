@@ -56,8 +56,9 @@ const SettingsScreen = () => {
 
   const handleSignOutClick = () => {
     dispatch(userSlice.actions.login({
-      phoneNumber: -1,
+      phoneNumber: '',
       fullname: '',
+      position: '',
       isLogin: false
     }));
     navigation.reset({

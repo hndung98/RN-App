@@ -4,16 +4,11 @@ import HeaderText from '../components/HeaderText';
 import { useDispatch } from 'react-redux';
 import { userSlice } from '../redux/slice/userSlice';
 import { windowWidth, windowHeight } from '../redux/store';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
+import { getYMD, isNumeric } from '../utils/common';
 import { signInUser } from '../utils/services';
 
-const isNumeric = (str) => {
-  if (typeof str != "string") return false // we only process strings!  
-  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-}
 
 export default function SignInScreen() {
   const [phoneNumber, onChangePhoneNumber] = React.useState('');
@@ -23,9 +18,21 @@ export default function SignInScreen() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-  });
+  }, []);
 
   const handleSignInClick = () => {
+    // dispatch(userSlice.actions.login({
+    //   phoneNumber: '0352551551',
+    //   fullname: 'Hoàng Dũng',
+    //   position: 'TP HCM',
+    //   isLogin: true
+    // }));
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{name: 'MainScreen'}],
+    // });
+    // return;
+    
     if (!validateForm().success){
       showAlert(validateForm().msg);
     }
@@ -46,6 +53,7 @@ export default function SignInScreen() {
           dispatch(userSlice.actions.login({
             phoneNumber: phoneNumber,
             fullname: res.data.user.fullname,
+            position: res.data.user.position,
             isLogin: true
           }));
           navigation.reset({

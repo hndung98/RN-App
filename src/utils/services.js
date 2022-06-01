@@ -101,3 +101,21 @@ export const signInUser = (user, callback) => {
         }
     });
 }
+
+export const AddNewTransaction = (transData, callback) => {
+    set(ref(db, 'transactions/' + transData.id), {
+        ...transData
+    })
+    .then(() => {
+        if (callback) callback({
+            success: true,
+            error: null
+        });
+    })
+    .catch((error) => {
+        if (callback) callback({
+            success: false,
+            error: error
+        });
+    });
+}
